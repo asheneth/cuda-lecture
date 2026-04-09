@@ -1,5 +1,3 @@
-#include "kernels/tiled_coalesced.cuh"
-
 __global__ void tiled_coalesced_kernel(float * __restrict__ a, float * __restrict__ b, float * __restrict__ c, int M, int N, int K){
 	int x = threadIdx.x;
 	int y = threadIdx.y;

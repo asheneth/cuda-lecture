@@ -1,5 +1,3 @@
-#include "kernels/coarse.cuh"
-
 #define TILE_COUNT 8
 
 __global__ void coarse_kernel(float * __restrict__ a, float * __restrict__ b, float * __restrict__ c, int M, int N, int K){
