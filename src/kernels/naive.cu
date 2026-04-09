@@ -1,4 +1,4 @@
-#include "kernels/naive.h"
+#include "kernels/naive.cuh"
 
 __global__ void naive_kernel(float * __restrict__ a, float * __restrict__ b, float * __restrict__ c, int M, int N, int K){
 	int x = (blockIdx.x * blockDim.x) + threadIdx.y;

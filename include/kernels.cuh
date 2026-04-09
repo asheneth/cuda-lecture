@@ -1,8 +1,8 @@
-#ifndef KERNELS_H
-#define KERNELS_H
+#ifndef KERNELS_CUH
+#define KERNELS_CUH
 
 void do_kernel(int kernel, int M, int N, int K, bool check);
 void cleanup();
 
-#endif // KERNELS_H
+#endif // KERNELS_CUH
 

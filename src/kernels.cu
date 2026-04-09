@@ -1,11 +1,11 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "kernels/naive.h"
-#include "kernels/naive_correct.h"
-#include "kernels/coalesced.h"
-#include "kernels/tiled.h"
-#include "kernels.h"
+#include "kernels/naive.cuh"
+#include "kernels/naive_correct.cuh"
+#include "kernels/coalesced.cuh"
+#include "kernels/tiled.cuh"
+#include "kernels.cuh"
 
 cudaEvent_t start = nullptr;
 cudaEvent_t stop;

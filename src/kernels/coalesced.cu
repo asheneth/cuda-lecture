@@ -1,4 +1,4 @@
-#include "kernels/coalesced.h"
+#include "kernels/coalesced.cuh"
 
 __global__ void coalesced_kernel(float * __restrict__ a, float * __restrict__ b, float * __restrict__ c, int M, int N, int K){
 	for(int y = (blockIdx.y * blockDim.y) + threadIdx.x; y < M; y += blockDim.y * gridDim.y){
