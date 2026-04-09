@@ -35,7 +35,6 @@ void make_buffers(){
 	b_h = (float *)malloc(K * N * sizeof(float));
 	c_h = (float *)malloc(M * N * sizeof(float));
 
-	// TODO: use some sort of rng
 	for(int i = 0; i < M * K; i++){
 		a_h[i] = ((float)rand()) / ((float)RAND_MAX);
 	}
