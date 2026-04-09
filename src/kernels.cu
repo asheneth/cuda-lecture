@@ -3,8 +3,9 @@
 
 #include "kernels/naive.cuh"
 #include "kernels/naive_correct.cuh"
-#include "kernels/coalesced.cuh"
 #include "kernels/tiled.cuh"
+#include "kernels/tiled_coalesced.cuh"
+#include "kernels/coarse.cuh"
 #include "kernels.cuh"
 
 cudaEvent_t start = nullptr;
@@ -63,14 +64,18 @@ void free_buffers(){
 	}
 } // free_buffers
 
-bool check_c(){
+bool check_c(bool b_col){
 	cudaMemcpy(c_h, c_d, M * N * sizeof(float), cudaMemcpyDeviceToHost);
 
 	for(int y = 0; y < M; y++){
 		for(int x = 0; x < N; x++){
 			float tmp = 0.0f;
 			for(int k = 0; k < K; k++){
-				tmp += a_h[(y * K) + k] * b_h[(k * N) + x];
+				if(b_col){
+					tmp += a_h[(y * K) + k] * b_h[(x * N) + k];
+				}else{
+					tmp += a_h[(y * K) + k] * b_h[(k * N) + x];
+				}
 			}
 
 			if(c_h[(y * N) + x] < tmp * 0.99 || tmp * 1.01 < c_h[(y * N) + x]){
@@ -132,7 +137,7 @@ void do_kernel(int kernel, int i_M, int i_N, int i_K, bool check){
 			dim3 grid_size(N / 32, M / 32);
 			dim3 block_size(32, 32);
 
-			coalesced_kernel<<<grid_size, block_size>>>(a_d, b_d, c_d, M, N, K);
+			tiled_kernel<<<grid_size, block_size>>>(a_d, b_d, c_d, M, N, K);
 
 			break;
 		}
@@ -140,7 +145,15 @@ void do_kernel(int kernel, int i_M, int i_N, int i_K, bool check){
 			dim3 grid_size(N / 32, M / 32);
 			dim3 block_size(32, 32);
 
-			tiled_kernel<<<grid_size, block_size>>>(a_d, b_d, c_d, M, N, K);
+			tiled_coalesced_kernel<<<grid_size, block_size>>>(a_d, b_d, c_d, M, N, K);
+
+			break;
+		}
+		case 5:{
+			dim3 grid_size(N / 32, M / 32);
+			dim3 block_size(32, 32);
+
+			coarse_kernel<<<grid_size, block_size>>>(a_d, b_d, c_d, M, N, K);
 
 			break;
 		}
@@ -161,7 +174,7 @@ void do_kernel(int kernel, int i_M, int i_N, int i_K, bool check){
 	std::cout << "Time: " << ms << "ms" << std::endl;
 
 	if(check){
-		if(!check_c()){
+		if(!check_c(false)){
 			std::cout << "ERROR: c is incorrect" << std::endl;
 		}
 	}

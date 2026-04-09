@@ -7,8 +7,9 @@ all:\
 	bin/kernels.o\
 	bin/kernels/naive.o\
 	bin/kernels/naive_correct.o\
-	bin/kernels/coalesced.o\
-	bin/kernels/tiled.o
+	bin/kernels/tiled.o\
+	bin/kernels/tiled_coalesced.o\
+	bin/kernels/coarse.o
 	$(CC) $(CUDAFLAGS) $? -o bin/a
 
 bin/%.o: src/%.cu

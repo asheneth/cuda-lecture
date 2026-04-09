@@ -27,7 +27,7 @@ int main(int argc, char **argv){
 
 	do_kernel(kernel, 128, 64, 96, true);
 
-	for(int i = 1; i < 5; i++){
+	for(int i = 1; i < 6; i++){
 		do_kernel(i, 4096, 4096, 4096, false);
 	}
 

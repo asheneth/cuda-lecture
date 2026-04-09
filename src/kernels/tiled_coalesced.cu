@@ -1,8 +1,8 @@
-#include "kernels/tiled.cuh"
+#include "kernels/tiled_coalesced.cuh"
 
-__global__ void tiled_kernel(float * __restrict__ a, float * __restrict__ b, float * __restrict__ c, int M, int N, int K){
-	int x = threadIdx.y;
-	int y = threadIdx.x;
+__global__ void tiled_coalesced_kernel(float * __restrict__ a, float * __restrict__ b, float * __restrict__ c, int M, int N, int K){
+	int x = threadIdx.x;
+	int y = threadIdx.y;
 	int idx = (y * 32) + x;
 
 	__shared__ float a_tile[32 * 32];
@@ -27,5 +27,5 @@ __global__ void tiled_kernel(float * __restrict__ a, float * __restrict__ b, flo
 			c[((t_y + y) * N) + (t_x + x)] = tmp;
 		}
 	}
-} // tiled_kernel
+} // tiled_coalesced_kernel
 
